@@ -18,105 +18,16 @@ const player = document.getElementById("player");
 const music = document.getElementById("music");
 
 // Songs
-const songs = [
-  {
-    artist: "Aşık Celali",
-    src: "a1.mp3",
-    name: "Tombul Memeler",
-    img: "celal.jpg",
-  },
-  {
-    artist: "Scandinavianz",
-    src: "a2.mp3",
-    name: "Panama",
-    img: "a2.jpg",
-  },
-  {
-    artist: "Declan",
-    src: "a3.mp3",
-    name: "All Night",
-    img: "a3.jpg",
-  },
-  {
-    artist: "Mountain Man",
-    src: "a4.mp3",
-    name: "Acustic Love",
-    img: "a4.jpg",
-  },
-  {
-    artist: "Ason Id",
-    src: "a5.mp3",
-    name: "Horizon",
-    img: "a5.jpg",
-  },
-  {
-    artist: "Vendredi",
-    src: "a6.mp3",
-    name: "Hipnosis",
-    img: "a6.jpg",
-  },
-  {
-    artist: "Young Blood",
-    src: "a7.mp3",
-    name: "Energetic Royalty",
-    img: "a7.jpg",
-  },
-  {
-    artist: "Hackers Loyalty",
-    src: "a8.mp3",
-    name: "Retrowave",
-    img: "a8.jpg",
-  },
-  {
-    artist: "Broke in Summer",
-    src: "a9.mp3",
-    name: "Girl on A Date",
-    img: "a9.jpg",
-  },
-  {
-    artist: "Laio",
-    src: "a10.mp3",
-    name: "Back To 1981",
-    img: "a10.jpg",
-  },
-  {
-    artist: "Johny Grimes",
-    src: "a11.mp3",
-    name: "Orbit",
-    img: "a11.jpg",
-  },
-  {
-    artist: "Mountain Man",
-    src: "a12.mp3",
-    name: "Flowers",
-    img: "a12.jpg",
-  },
-  {
-    artist: "Dauntaro",
-    src: "a13.mp3",
-    name: "Something bout",
-    img: "a13.jpg",
-  },
-  {
-    artist: "Tubebackr",
-    src: "a14.mp3",
-    name: "Your Turn",
-    img: "a14.jpg",
-  },
-  {
-    artist: "Mountain Man",
-    src: "a15.mp3",
-    name: "Trees",
-    img: "a15.jpg",
-  },
-  {
-    id: "16",
-    artist: "Kimochii",
-    src: "a16.mp3",
-    name: "Mona Wonderlick",
-    img: "a16.jpg",
-  },
-];
+// to retrieve songs
+const endPointURL = "http://localhost:3000"
+
+let songs;
+const getSongs = async () => {
+  const res = await fetch(`${endPointURL}/api/songs`)
+  const data = await res.json()
+  songs = data
+  setAudioSong(songs[current])
+}
 
 let current = 0;
 let RANDOM = false;
@@ -126,12 +37,12 @@ let PAUSE = false;
 
 // set the song informations
 function setAudioSong(x) {
-  music.src = `musics/${x.src}`;
+  music.src = `${endPointURL}/songs/${x.src}`;
   artistName.textContent = x.artist;
   songName.textContent = x.name;
-  artistImage.src = `song-covers/${x.img}`;
-  artistInfoBg.src = `song-covers/${x.img}`;
-  artistInfoBg.style.background = `url("song-covers/${x.img}") no-repeat center center/cover`;
+  artistImage.src = `${endPointURL}/thumbnails/${x.img}`;
+  artistInfoBg.src = `${endPointURL}/thumbnails/${x.img}`;
+  artistInfoBg.style.background = `url("${endPointURL}/thumbnails/${x.img}") no-repeat center center/cover`;
 }
 
 // Play the song
@@ -213,7 +124,7 @@ function setProgress(e) {
 }
 
 //**********EVENT LISTENERS*********/
-window.addEventListener("load", setAudioSong(songs[current]));
+window.addEventListener("load", getSongs());
 play.addEventListener("click", () => {
   const isPlaying = player.classList.contains("playingrightnow");
   if (isPlaying) {
